@@ -6,6 +6,7 @@ const STAGES = ["Start", "Playing", "End"]
 const initialState = {
     gameStage: STAGES[0],
     questions,
+    currentQuestion: 0,
 }
 
 const quizReducer = (state, action) => {
@@ -18,12 +19,21 @@ const quizReducer = (state, action) => {
                 gameStage: STAGES[1],
             }
         
+        case "REODER_QUESTIONS":
+            { const reorderedQuestions = questions.sort(() => {
+                return Math.random() - 0.5;
+            })
+            return {
+                ...state,
+                questions: reorderedQuestions,
+            } }
+        
         default:
             return state
     }
 }
 
-export const QuizContext = createContext(null)
+export const QuizContext = createContext()
 
 export const QuizProvider = ({children}) => {
     const value = useReducer(quizReducer, initialState)
